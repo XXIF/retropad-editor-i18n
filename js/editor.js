@@ -631,9 +631,11 @@ function applyScreenDimensions() {
 
 
 function createDownloadLink() {
-	let file = new Blob([conf.getConfigString()], { type: 'text/cfg' });
+	let cfg = conf.getConfigString();
+	// Use data URI for maximum browser compatibility
+	let uri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(cfg);
 	let a = document.getElementById('export-link');
-	a.href = URL.createObjectURL(file);
+	a.href = uri;
 	a.download = 'new-' + importedFilename;
 }
 
@@ -1504,7 +1506,10 @@ function updateNewOverlayFields() {
 
 
 	function _fillCurrentOverlay() {
-		box.value = conf.getCurrentOverlayParams().join('\n');
+		let allParams = conf.getCurrentOverlayParams();
+		// Exclude 'overlay' from the text box — it's managed separately via the image input
+		let filteredParams = allParams.filter(p => !p.toLowerCase().startsWith('overlay ='));
+		box.value = filteredParams.join('\n');
 		// Extract and set background image from current overlay
 		let bg = conf.getCurrentOverlayBackground();
 		let selector = document.getElementById('overlay-image-select');
