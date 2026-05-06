@@ -420,6 +420,7 @@ function loadImageFiles(e) {
 			if (++loadCounter == imgCounter) {
 				redrawPad();
 				fillImageSelector();
+				fillOverlayImageSelector();
 			}
 		};
 
