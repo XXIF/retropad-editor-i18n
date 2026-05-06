@@ -67,6 +67,7 @@
 			'command': 'Command',
 			'image': 'Image',
 			'shape': 'Shape',
+			'insert-after': 'Insert after',
 			'additional': 'Additional',
 			'raw-data': 'Raw data:',
 			'edit-carefully': 'Edit carefully!',
@@ -81,6 +82,7 @@
 			// Overlay dialog
 			'create-edit-overlay-title': 'Create/Edit overlay',
 			'overlay-name': 'Overlay name',
+			'overlay-bg-image': 'Background image',
 			'edit-current-overlay': 'Edit current overlay',
 			'duplicate-current-overlay': 'Duplicate current overlay',
 			'overlay-portrait': 'Portrait',
@@ -131,7 +133,8 @@
 
 			// Reset dialog
 			'reset-question': 'Do you want to reset?<br>All unsaved editions will be lost!',
-			'reset-btn': 'Reset',
+			'reset-to-default': 'Factory default',
+			'reset-to-imported': 'Reset to imported',
 
 			// Delete overlay
 			'delete-overlay-question': 'Delete current overlay?',
@@ -241,6 +244,7 @@
 			'command': '命令',
 			'image': '图片',
 			'shape': '形状',
+			'insert-after': '插入到之后',
 			'additional': '附加属性',
 			'raw-data': '原始数据：',
 			'edit-carefully': '请谨慎编辑！',
@@ -255,6 +259,7 @@
 			// Overlay dialog
 			'create-edit-overlay-title': '创建/编辑叠加层',
 			'overlay-name': '叠加层名称',
+			'overlay-bg-image': '背景图片',
 			'edit-current-overlay': '编辑当前叠加层',
 			'duplicate-current-overlay': '复制当前叠加层',
 			'overlay-portrait': '竖屏',
@@ -305,7 +310,8 @@
 
 			// Reset dialog
 			'reset-question': '确定要重置吗？<br>所有未保存的修改将丢失！',
-			'reset-btn': '重置',
+			'reset-to-default': '重置为默认',
+			'reset-to-imported': '重置为已导入',
 
 			// Delete overlay
 			'delete-overlay-question': '删除当前叠加层？',

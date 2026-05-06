@@ -304,32 +304,52 @@ function ConfigHandler() {
 	}
 
 
-	this.createButton = function (command, shape, image, addLines) {
+	this.createButton = function (command, shape, image, addLines, insertAfterDescIndex) {
 		let overlayXX = 'overlay' + _currentOverlay;
 		let buttCount = Number(_getParamValue(`${overlayXX}_descs`));
 
-		let last;
+		let insertIndex;
+		let isInsertMode = (insertAfterDescIndex !== undefined && insertAfterDescIndex >= 0 && insertAfterDescIndex < buttCount);
 
-		let reg = new RegExp('^' + overlayXX + '_desc' + (buttCount - 1));
-		for (let i = _strings.length - 1; i >= 0; i--) {
-			if (_strings[i].split('=')[0].trim().search(reg) != -1) {
-				last = i;
-				break
+		if (isInsertMode) {
+			// Insert after a specific desc, not at end
+			let reg = new RegExp('^' + overlayXX + '_desc' + insertAfterDescIndex);
+			for (let i = _strings.length - 1; i >= 0; i--) {
+				if (_strings[i].split('=')[0].trim().search(reg) != -1) {
+					insertIndex = i;
+					break;
+				}
+			}
+		} else {
+			// Append at end (original behavior)
+			let reg = new RegExp('^' + overlayXX + '_desc' + (buttCount - 1));
+			for (let i = _strings.length - 1; i >= 0; i--) {
+				if (_strings[i].split('=')[0].trim().search(reg) != -1) {
+					insertIndex = i;
+					break;
+				}
+			}
+			if (!insertIndex)
+				insertIndex = _getParamIndex(`${overlayXX}_descs`);
+		}
+
+		if (insertIndex == undefined || insertIndex == -1)
+			throw new Error('can not find position to insert new line');
+
+		// When inserting mid-list, renumber existing descs to make room
+		if (isInsertMode) {
+			for (let i = buttCount - 1; i >= insertAfterDescIndex + 1; i--) {
+				_replaceParamNumbers(overlayXX + '_desc', i, i + 1);
 			}
 		}
 
-		if (!last)
-			last = _getParamIndex(`${overlayXX}_descs`);
-
-		if (last == -1)
-			throw new Error('can not find position to insert new line');
-
-		let overlayXX_descYY = `${overlayXX}_desc${buttCount}`;
+		let newDescNum = isInsertMode ? insertAfterDescIndex + 1 : buttCount;
+		let overlayXX_descYY = `${overlayXX}_desc${newDescNum}`;
 		console.log("NEW BUTTON", overlayXX_descYY, command, shape, image);
 		let arr = [`${overlayXX_descYY} = "${command},0.50000,0.50000,${shape},0.05000,0.05000"`];
-		_strings.splice(last + 1, 0, ...arr);
+		_strings.splice(insertIndex + 1, 0, ...arr);
 
-		this.setCurrentLine(last + 1);
+		this.setCurrentLine(insertIndex + 1);
 		this.updateCurrentButton(command, shape, image, addLines);
 
 		_setParamValue(`${overlayXX}_descs`, buttCount + 1);
@@ -783,6 +803,8 @@ function ConfigHandler() {
 		let position = _getParamSectionValuePos(section);
 		let blocks = str.split('"');
 		let data = blocks[1].split(',');
+		// trim spaces from all values, replace edited value
+		for (let i = 0; i < data.length; i++) data[i] = data[i].trim();
 		data[position] = value;
 		blocks[1] = data.join(',');
 
@@ -795,7 +817,7 @@ function ConfigHandler() {
 		let blocks = str.split('"');
 		let data = blocks[1].split(',');
 
-		return data[position];
+		return data[position].trim();
 	}
 
 

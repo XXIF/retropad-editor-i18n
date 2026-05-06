@@ -182,6 +182,15 @@
 							</td>
 						</tr>
 
+						<tr id='insert-after-row'>
+							<td>
+								<label for='insert-after-select' data-i18n="insert-after">Insert after</label>
+							</td>
+							<td>
+								<select id='insert-after-select' class='notranslate' translate='no'></select>
+							</td>
+						</tr>
+
 						<tr>
 							<td>
 								<button class='empty expander button--normal-size' id='btn-additional-button'
@@ -289,6 +298,10 @@
 						<input type='checkbox' autocomplete='off' id='chk-portrait-overlay'
 							onchange='updateNewOverlayFields()'>
 						<label for='chk-portrait-overlay' data-i18n="overlay-portrait">Portrait</label>
+						<br class='wide'>
+						<label data-i18n="overlay-bg-image">Background image</label>
+						<input type='text' id='overlay-image' autocomplete='off'>
+						<select id='overlay-image-select' class='miniselect notranslate' translate='no'></select>
 					</div>
 					<div class='dialog-content-box__section'>
 						<button class='empty expander button--normal-size' onclick='toggleAdditionalOverlayProperties()'
@@ -509,9 +522,12 @@
 			<div class='modal-dialog'>
 				<div class='modal-dialog__content-box'>
 					<span data-i18n-html="true" data-i18n="reset-question">Do you want to reset?<br>All unsaved editions will be lost!</span>
+					<div style='margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;'>
+						<button class='danger' onclick='resetToDefault()' data-i18n="reset-to-default">Factory default</button>
+						<button class='danger' onclick='resetPad()' data-i18n="reset-to-imported">Reset to imported</button>
+					</div>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='danger js-dialog__focus' onclick='resetPad()' data-i18n="reset-btn">Reset</button>
 					<button onclick='showDialog("reset-dialog", false)' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>

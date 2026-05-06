@@ -54,6 +54,7 @@ fillImageSelector();
 
 let conf = new ConfigHandler();
 let configStr = defaultConfigString; // defaults.js
+const DEFAULT_CONFIG_STR = defaultConfigString; // keep a pristine copy for reset
 renderConfig(configStr);
 
 'xywh'.split('').forEach(elem => {
@@ -90,6 +91,15 @@ document.getElementById('chk-show-screenshot').addEventListener('change', toggle
 document.getElementById('lang-select').addEventListener('change', function (e) {
 	window.__setLang(e.target.value);
 });
+
+// Overlay background image selector
+fillOverlayImageSelector();
+let overlayImgSelect = document.getElementById('overlay-image-select');
+if (overlayImgSelect) {
+	overlayImgSelect.addEventListener('change', function (e) {
+		document.getElementById('overlay-image').value = e.target.value;
+	});
+}
 
 
 function applyButtonParam(section, sValue) {
@@ -983,6 +993,15 @@ function calculateScreenSizeToFit(width, height) {
 
 function resetPad() {
 	showDialog('reset-dialog', false);
+	// Reset to the last imported config
+	renderConfig(configStr);
+}
+
+function resetToDefault() {
+	showDialog('reset-dialog', false);
+	// Reset to built-in factory default
+	configStr = DEFAULT_CONFIG_STR;
+	importedFilename = 'retropad.cfg';
 	renderConfig(configStr);
 }
 
@@ -1080,8 +1099,12 @@ function addButton() {
 	if (d.warn)
 		return;
 
+	let insertSelect = document.getElementById('insert-after-select');
+	let insertIdx = insertSelect ? Number(insertSelect.value) : -1;
+	let insertAfterDescIndex = isNaN(insertIdx) || insertIdx < 0 ? undefined : insertIdx;
+
 	hideButtonEditor();
-	conf.createButton(d.command, d.shape, d.image, d.lines);
+	conf.createButton(d.command, d.shape, d.image, d.lines, insertAfterDescIndex);
 	redrawPad();
 }
 
@@ -1102,6 +1125,11 @@ function addOverlay() {
 	let name = document.getElementById('overlay-name').value.trim();
 	let raw = document.getElementById('raw-overlay-properties').value;
 	let props = processRawProperties(raw);
+
+	// Include background image if set
+	let overlayImg = document.getElementById('overlay-image').value.trim();
+	if (overlayImg)
+		props.push('overlay = "' + overlayImg + '"');
 
 	if (conf.isOverlayNameExist(name)) {
 		showDialog('name-exist-dialog', true);
@@ -1128,6 +1156,12 @@ function addOverlay() {
 function editOverlay() {
 	let name = document.getElementById('overlay-name').value.trim();
 	let raw = document.getElementById('raw-overlay-properties').value;
+	let props = processRawProperties(raw);
+
+	// Include background image if set
+	let overlayImg = document.getElementById('overlay-image').value.trim();
+	if (overlayImg)
+		props.push('overlay = "' + overlayImg + '"');
 
 	if (conf.getCurrentOverlayName() != name && conf.isOverlayNameExist(name)) {
 		showDialog('name-exist-dialog', true);
@@ -1139,7 +1173,7 @@ function editOverlay() {
 		return;
 	}
 
-	conf.editCurrentOverlay(name, processRawProperties(raw));
+	conf.editCurrentOverlay(name, props);
 
 	hideOverlayEditor();
 	buildAndSetOverlaySelectors(conf.getCurrentOverlay());
@@ -1174,6 +1208,9 @@ function showButtonEditor() {
 
 	document.getElementById('button-create-button').classList.add('hidden');
 	document.getElementById('button-edit-button').classList.remove('hidden');
+	// Hide insert-after row when editing
+	let insertRow = document.getElementById('insert-after-row');
+	if (insertRow) insertRow.classList.add('hidden');
 	showDialog('button-create-dialog', true);
 }
 
@@ -1182,7 +1219,60 @@ function showButtonCreator() {
 	resetButtonDialog();
 	document.getElementById('button-create-button').classList.remove('hidden');
 	document.getElementById('button-edit-button').classList.add('hidden');
+	// Show insert-after row when creating, populate it
+	let insertRow = document.getElementById('insert-after-row');
+	if (insertRow) insertRow.classList.remove('hidden');
+	fillInsertAfterSelector();
 	showDialog('button-create-dialog', true);
+}
+
+
+function fillInsertAfterSelector() {
+	let select = document.getElementById('insert-after-select');
+	if (!select) return;
+	select.innerHTML = '';
+
+	// Add "At end" option (default)
+	let endOpt = document.createElement('OPTION');
+	endOpt.value = '-1';
+	endOpt.appendChild(document.createTextNode('— ' + __('insert-after') + ' —'));
+	select.appendChild(endOpt);
+
+	// List all desc buttons in current overlay
+	let overlayXX = 'overlay' + conf.getCurrentOverlay();
+
+	// Read descs from config
+	let allLines = conf.getConfigString().split('\n');
+	let re = new RegExp('^' + overlayXX + '_desc(\\d+)$');
+	let descMap = [];
+	for (let i = 0; i < allLines.length; i++) {
+		let param = allLines[i].split('=')[0].trim();
+		let m = param.match(re);
+		if (m) {
+			let idx = Number(m[1]);
+			if (!descMap.some(e => e.idx === idx)) {
+				let value = _getParamSectionValueFromLine(allLines[i], 'command');
+				descMap.push({ idx, cmd: value, text: allLines[i] });
+			}
+		}
+	}
+
+	descMap.sort((a, b) => a.idx - b.idx);
+
+	for (let d of descMap) {
+		let o = document.createElement('OPTION');
+		o.value = String(d.idx);
+		o.appendChild(document.createTextNode('#' + d.idx + ' - ' + d.cmd));
+		select.appendChild(o);
+	}
+}
+
+function _getParamSectionValueFromLine(str, section) {
+	let pos = { command: 0, x: 1, y: 2, shape: 3, w: 4, h: 5 }[section];
+	if (pos === undefined) return '';
+	let blocks = str.split('"');
+	if (blocks.length < 2) return '';
+	return blocks[1].split(',')[pos].trim();
 }
 
 
@@ -1375,6 +1465,7 @@ function updateNewOverlayFields() {
 	let duplicateChk = document.getElementById('chk-duplicate-overlay');
 	let portraitChk = document.getElementById('chk-portrait-overlay');
 	let editChk = document.getElementById('chk-edit-overlay');
+	let overlayImgInput = document.getElementById('overlay-image');
 
 	let isDuplicate = duplicateChk.checked;
 	let isPortrait = portraitChk.checked;
@@ -1405,6 +1496,7 @@ function updateNewOverlayFields() {
 		_fillCurrentOverlay();
 	} else {
 		portraitChk.disabled = false;
+		overlayImgInput.value = '';
 		let ratio = 'aspect_ratio = ' + +(isPortrait ? 1 / aspect : aspect).toFixed(7);
 		box.value = defaultParamsForNewOverlay + '\n' + ratio;
 		box.value += '\n' + autoScaleParams + 'auto_y_separation = ' + (isPortrait ? 'false' : 'true');
@@ -1416,9 +1508,48 @@ function updateNewOverlayFields() {
 
 	function _fillCurrentOverlay() {
 		box.value = conf.getCurrentOverlayParams().join('\n');
+		// Extract and set background image from current overlay
+		let bg = conf.getCurrentOverlayBackground();
+		overlayImgInput.value = bg.image || '';
+		_setOverlayImageSelectorOption(bg.image);
 		isPortrait = document.getElementById('overlay-selector').value.search('portrait') != -1;
 		portraitChk.checked = isPortrait;
 		portraitChk.disabled = true;
+	}
+}
+
+function fillOverlayImageSelector() {
+	let selector = document.getElementById('overlay-image-select');
+	if (!selector) return;
+	selector.innerHTML = '';
+
+	let listAll = [];
+	if (userImages.length > 0)
+		listAll = listAll.concat(userImages);
+
+	let defImages = [''];
+	for (let f in images)
+		if (!userImages.includes(f))
+			defImages.push(f);
+
+	listAll = listAll.concat(defImages);
+
+	for (let name of listAll) {
+		let o = document.createElement('OPTION');
+		o.appendChild(document.createTextNode(name));
+		selector.appendChild(o);
+	}
+}
+
+function _setOverlayImageSelectorOption(value) {
+	let s = document.getElementById('overlay-image-select');
+	if (!s) return;
+	s.value = '';
+	for (let i = 0; i < s.options.length; i++) {
+		if (s.options[i].text == value) {
+			s.selectedIndex = i;
+			break;
+		}
 	}
 }
 
