@@ -1,9 +1,25 @@
 # RetroPad Editor
+
 Online tool to create and edit onscreen gamepads for RetroArch.
 
 https://valent-in.github.io/retropad-editor/
 
-Features:
+## 多语言支持 (i18n)
+
+本分支在原版基础上添加了完整的多语言支持。
+
+- **English** — 默认语言
+- **中文** — 简体中文
+
+顶部栏右侧有语言选择下拉框，切换后即时生效，偏好保存在浏览器本地存储中，下次访问自动沿用。
+
+## 仓库地址
+
+- 原版仓库: https://github.com/valent-in/retropad-editor
+- 多语言版本: https://github.com/XXIF/retropad-editor-i18n
+
+## Features
+
 - Create, move, resize buttons of virtual gamepad.
 - Multiple layers; auto switch orientation for portrait overlays.
 - Fix overlay aspect ratio.

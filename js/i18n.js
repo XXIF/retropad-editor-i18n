@@ -59,6 +59,7 @@
 			'footer-github': 'GitHub',
 			'footer-forum': 'Forum',
 			'footer-retroarch': 'RetroArch',
+			'footer-i18n': 'I18n',
 			'version': 'v0.9.9',
 
 			// Button properties dialog
@@ -232,6 +233,7 @@
 			'footer-github': 'GitHub',
 			'footer-forum': '论坛',
 			'footer-retroarch': 'RetroArch',
+			'footer-i18n': '多语言',
 			'version': 'v0.9.9',
 
 			// Button properties dialog
