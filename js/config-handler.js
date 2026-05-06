@@ -154,7 +154,7 @@ function ConfigHandler() {
 	}
 
 
-	this.createOverlay = function (name, params) {
+	this.createOverlay = function (name, params, overlayImg) {
 		if (this.isOverlayNameExist(name))
 			return;
 
@@ -167,6 +167,9 @@ function ConfigHandler() {
 
 		if (Array.isArray(params))
 			params.forEach(line => _strings.push('overlay' + count + '_' + line));
+
+		if (overlayImg)
+			_strings.push('overlay' + count + '_overlay = "' + overlayImg + '"');
 
 		_strings.push('overlay' + count + '_descs = 0');
 		_setParamValue('overlays', count + 1);
@@ -199,7 +202,7 @@ function ConfigHandler() {
 
 
 	// copy only overlayXX_desc*
-	this.duplicateCurrentOverlay = function (name, params) {
+	this.duplicateCurrentOverlay = function (name, params, overlayImg) {
 		if (this.isOverlayNameExist(name))
 			return;
 
@@ -220,6 +223,19 @@ function ConfigHandler() {
 				result.push('overlay' + count + '_' + params[i]);
 			}
 
+		// Use new overlayImg if provided, otherwise copy from original
+		if (overlayImg) {
+			result.push('overlay' + count + '_overlay = "' + overlayImg + '"');
+		} else {
+			// Copy overlay image from original if it exists
+			let origOverlayIdx = _getParamIndex(overlayXX + '_overlay');
+			if (origOverlayIdx >= 0) {
+				let origLine = _strings[origOverlayIdx];
+				let val = origLine.split('=')[1].trim();
+				result.push('overlay' + count + '_overlay = ' + val);
+			}
+		}
+
 		for (let i = 0; i < current.length; i++) {
 			if (current[i].search('^' + overlayXX + '_desc') == -1)
 				continue;
@@ -231,7 +247,7 @@ function ConfigHandler() {
 	}
 
 
-	this.editCurrentOverlay = function (name, params) {
+	this.editCurrentOverlay = function (name, params, overlayImg) {
 		if (name.trim() == '')
 			return;
 
@@ -246,8 +262,10 @@ function ConfigHandler() {
 
 		for (let i = 0; i < current.length; i++) {
 			let currentLine = overlayXX + '_' + current[i];
-			// get parameter name without '=' and value
 			let currentLineParam = currentLine.split('=')[0].trim();
+			// Handle overlay separately (uses _setParamValue below)
+			if (currentLineParam === overlayXX + '_overlay')
+				continue;
 			let index = _getParamIndex(currentLineParam);
 			if (index >= 0) {
 				console.log('DELETE: ' + currentLine);
@@ -265,6 +283,20 @@ function ConfigHandler() {
 		}
 
 		_strings.splice(insertAfter + 1, 0, ...newParams);
+
+		// Handle overlay image separately to avoid duplicates
+		if (overlayImg !== undefined) {
+			if (overlayImg) {
+				_setParamValue(overlayXX + '_overlay', '"' + overlayImg + '"');
+			} else {
+				// Remove overlay line if empty
+				let idx = _getParamIndex(overlayXX + '_overlay');
+				if (idx >= 0) {
+					console.log('DELETE: ' + overlayXX + '_overlay');
+					_strings.splice(idx, 1);
+				}
+			}
+		}
 
 		_updateLinkedButtons(currentName, name);
 	}

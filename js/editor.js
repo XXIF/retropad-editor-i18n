@@ -162,7 +162,7 @@ function createPadBackground() {
 	backgroundDiv.classList.add('screenpad-background');
 
 	let bg = conf.getCurrentOverlayBackground();
-	if (bg.image) {
+	if (bg.image && images[bg.image]) {
 		backgroundDiv.style['background-image'] = 'url(' + images[bg.image] + ')';
 	}
 
@@ -1127,10 +1127,8 @@ function addOverlay() {
 	let raw = document.getElementById('raw-overlay-properties').value;
 	let props = processRawProperties(raw);
 
-	// Include background image if set
+	// Background image is handled separately by createOverlay / duplicateCurrentOverlay
 	let overlayImg = document.getElementById('overlay-image').value.trim();
-	if (overlayImg)
-		props.push('overlay = "' + overlayImg + '"');
 
 	if (conf.isOverlayNameExist(name)) {
 		showDialog('name-exist-dialog', true);
@@ -1143,9 +1141,9 @@ function addOverlay() {
 	}
 
 	if (document.getElementById('chk-duplicate-overlay').checked)
-		conf.duplicateCurrentOverlay(name, props);
+		conf.duplicateCurrentOverlay(name, props, overlayImg);
 	else
-		conf.createOverlay(name, props);
+		conf.createOverlay(name, props, overlayImg);
 
 	hideOverlayEditor();
 	buildAndSetOverlaySelectors(1000);
@@ -1159,10 +1157,8 @@ function editOverlay() {
 	let raw = document.getElementById('raw-overlay-properties').value;
 	let props = processRawProperties(raw);
 
-	// Include background image if set
+	// Background image is handled separately by editCurrentOverlay
 	let overlayImg = document.getElementById('overlay-image').value.trim();
-	if (overlayImg)
-		props.push('overlay = "' + overlayImg + '"');
 
 	if (conf.getCurrentOverlayName() != name && conf.isOverlayNameExist(name)) {
 		showDialog('name-exist-dialog', true);
@@ -1174,7 +1170,7 @@ function editOverlay() {
 		return;
 	}
 
-	conf.editCurrentOverlay(name, props);
+	conf.editCurrentOverlay(name, props, overlayImg);
 
 	hideOverlayEditor();
 	buildAndSetOverlaySelectors(conf.getCurrentOverlay());
