@@ -1466,7 +1466,7 @@ function updateNewOverlayFields() {
 	let duplicateChk = document.getElementById('chk-duplicate-overlay');
 	let portraitChk = document.getElementById('chk-portrait-overlay');
 	let editChk = document.getElementById('chk-edit-overlay');
-	let overlayImgInput = document.getElementById('overlay-image');
+	let overlayImgInput = document.getElementById('overlay-image') || { value: '' };
 
 	let isDuplicate = duplicateChk.checked;
 	let isPortrait = portraitChk.checked;
@@ -1511,8 +1511,18 @@ function updateNewOverlayFields() {
 		box.value = conf.getCurrentOverlayParams().join('\n');
 		// Extract and set background image from current overlay
 		let bg = conf.getCurrentOverlayBackground();
-		overlayImgInput.value = bg.image || '';
-		_setOverlayImageSelectorOption(bg.image);
+		let selector = document.getElementById('overlay-image-select');
+		// Only set image from config if it actually exists in the selector dropdown
+		if (bg.image && selector) {
+			let existsInList = Array.from(selector.options).some(o => o.text === bg.image);
+			if (existsInList) {
+				overlayImgInput.value = bg.image;
+				selector.value = bg.image;
+			} else {
+				overlayImgInput.value = '';
+				selector.value = '';
+			}
+		}
 		isPortrait = document.getElementById('overlay-selector').value.search('portrait') != -1;
 		portraitChk.checked = isPortrait;
 		portraitChk.disabled = true;
