@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>RetroPad Editor</title>
+	<title data-i18n="page-title">RetroPad Editor</title>
 	<link rel='shortcut icon' type='image/svg' href='img/retroarch-icon.svg'>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1'>
@@ -12,6 +12,7 @@
 	<link rel='stylesheet' href='css/elements.css'>
 	<link rel='stylesheet' href='css/style.css'>
 
+	<script defer src='js/i18n.js'></script>
 	<script defer src='js/defaults.js'></script>
 	<script defer src='js/config-handler.js'></script>
 	<script defer src='js/editor.js'></script>
@@ -22,62 +23,66 @@
 	<div id='main-container'>
 
 		<div id='header'>
-			<button class='important' onclick='showFileDialog()'>Import • Export</button>
-			<button class='danger button--normal-size' onclick='showDialog("reset-dialog", true)'>Reset</button>
-			<span id='header__caption'><img src='img/retroarch-icon.svg'>RetroPad Editor</span>
+			<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+				<button class='important' onclick='showFileDialog()' data-i18n="import-export">Import • Export</button>
+				<button class='danger button--normal-size' onclick='showDialog("reset-dialog", true)' data-i18n="reset">Reset</button>
+				<select id='lang-select' class='lang-select'>
+					<option value='en' data-i18n="language-en">English</option>
+					<option value='zh' data-i18n="language-zh">中文</option>
+				</select>
+			</div>
+			<span id='header__caption'><img src='img/retroarch-icon.svg'><span data-i18n="header-caption">RetroPad Editor</span></span>
 		</div>
 
 		<div id='workarea-container'>
 			<div id='toolbar'>
 
 				<div class='toolbar-group'>
-					<span class='group-header'>TOOLS</span>
+					<span class='group-header' data-i18n="group-tools">TOOLS</span>
 					<div class='join-buttons-div'>
-						<button onclick='showScreenSizeDialog()'>Set screen size</button>
-						<button title='Color theme' id='show-colors-button' onclick='showColorsDialog()'>C</button>
+						<button onclick='showScreenSizeDialog()' data-i18n="set-screen-size">Set screen size</button>
+						<button title='Color theme' data-i18n-title="color-theme" id='show-colors-button' onclick='showColorsDialog()' data-i18n="color-theme">C</button>
 					</div>
 					<br>
 					<div class='toolbar-group__checkboxes'>
 						<div class='checkbox-wrapper'>
 							<input type='checkbox' id='chk-show-shapes' autocomplete='off'>
-							<label for='chk-show-shapes'>Show shapes</label>
+							<label for='chk-show-shapes' data-i18n="show-shapes">Show shapes</label>
 						</div>
 
 						<div class='checkbox-wrapper'>
 							<input type='checkbox' id='chk-show-names' autocomplete='off' checked>
-							<label for='chk-show-names'>Show names</label>
+							<label for='chk-show-names' data-i18n="show-names">Show names</label>
 						</div>
 
 						<div class='checkbox-wrapper'>
 							<input type='checkbox' id='chk-show-portrait' autocomplete='off'>
-							<label for='chk-show-portrait'>Portrait</label>
+							<label for='chk-show-portrait' data-i18n="portrait">Portrait</label>
 						</div>
 
 						<div class='checkbox-wrapper'>
 							<input type='checkbox' id='chk-show-offscreen' autocomplete='off'>
-							<label for='chk-show-offscreen'>Show offscreen</label>
+							<label for='chk-show-offscreen' data-i18n="show-offscreen">Show offscreen</label>
 						</div>
 					</div>
 				</div>
 
 				<div class='toolbar-group'>
-					<span class='group-header'>OVERLAY</span>
+					<span class='group-header' data-i18n="group-overlay">OVERLAY</span>
 					<select id='overlay-selector' class='notranslate' translate='no'></select>
 					<div class='toolbar-group__buttons'>
-						<button onclick='showOverlayEditor()'>Create • Edit</button>
-						<button onclick='showDialog("overlay-delete-dialog", true)'>Delete overlay</button>
-						<button onclick='showAspectFixer()'>Fix aspect ratio</button>
+						<button onclick='showOverlayEditor()' data-i18n="create-edit-overlay">Create • Edit</button>
+						<button onclick='showDialog("overlay-delete-dialog", true)' data-i18n="delete-overlay">Delete overlay</button>
+						<button onclick='showAspectFixer()' data-i18n="fix-aspect-ratio">Fix aspect ratio</button>
 					</div>
 				</div>
 
 				<div class='toolbar-group'>
-					<span class='group-header'>BUTTON</span>
+					<span class='group-header' data-i18n="group-button">BUTTON</span>
 					<div class='toolbar-group__buttons'>
-						<button onclick='showButtonCreator()'>New button</button>
-						<button id='del-current-button' onclick='showDialog("button-delete-dialog", true)'>Delete
-							button</button>
-						<button id='show-button-editor' onclick='showButtonEditor()'>Edit
-							button</button>
+						<button onclick='showButtonCreator()' data-i18n="new-button">New button</button>
+						<button id='del-current-button' onclick='showDialog("button-delete-dialog", true)' data-i18n="delete-button">Delete button</button>
+						<button id='show-button-editor' onclick='showButtonEditor()' data-i18n="edit-button">Edit button</button>
 					</div>
 				</div>
 			</div>
@@ -93,30 +98,30 @@
 
 				<div id='editor'>
 					<div>
-						<span>X</span>
+						<span data-i18n="editor-x">X</span>
 						<input type='range' max=1 step=0.00001 id='x-range'>
 						<input type='number' step=any id='x-number'>
-						<button onclick='flipXcoord()'>Flip</button>
+						<button onclick='flipXcoord()' data-i18n="editor-flip">Flip</button>
 					</div>
 
 					<div>
-						<span>Y</span>
+						<span data-i18n="editor-y">Y</span>
 						<input type='range' max=1 step=0.00001 id='y-range'>
 						<input type='number' step=any id='y-number'>
 					</div>
 
 					<div>
-						<span>W</span>
+						<span data-i18n="editor-w">W</span>
 						<input type='range' max=1 step=0.00001 id='w-range'>
 						<input type='number' step=any id='w-number'>
-						<button id='norm-width' onclick='normalizeWidth()'>Quad</button>
+						<button id='norm-width' onclick='normalizeWidth()' data-i18n="editor-quad">Quad</button>
 					</div>
 
 					<div>
-						<span>H</span>
+						<span data-i18n="editor-h">H</span>
 						<input type='range' max=1 step=0.00001 id='h-range'>
 						<input type='number' step=any id='h-number'>
-						<button id='norm-height' onclick='normalizeHeight()'>Quad</button>
+						<button id='norm-height' onclick='normalizeHeight()' data-i18n="editor-quad">Quad</button>
 					</div>
 				</div>
 
@@ -124,11 +129,11 @@
 		</div>
 
 		<div id='footer'>
-			<a href='https://github.com/valent-in/retropad-editor' target='_blank' rel='noopener'>GitHub</a>
+			<a href='https://github.com/valent-in/retropad-editor' target='_blank' rel='noopener' data-i18n="footer-github">GitHub</a>
 			<a href='https://forums.libretro.com/t/retropad-editor-create-and-edit-onscreen-gamepads' target='_blank'
-				rel='noopener'>Forum</a>
-			<a href='https://www.retroarch.com' target='_blank' rel='noopener'>RetroArch</a>
-			<span id='version'>v0.9.9</span>
+				rel='noopener' data-i18n="footer-forum">Forum</a>
+			<a href='https://www.retroarch.com' target='_blank' rel='noopener' data-i18n="footer-retroarch">RetroArch</a>
+			<span id='version' data-i18n="version">v0.9.9</span>
 		</div>
 
 
@@ -136,14 +141,14 @@
 		<div id='button-create-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Button properties</span>
+					<span data-i18n="button-properties">Button properties</span>
 					<button class='close-button danger' onclick='hideButtonEditor()'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<table id='button-properties-table'>
 						<tr>
 							<td>
-								<label for='command-name'>Command</label>
+								<label for='command-name' data-i18n="command">Command</label>
 							</td>
 
 							<td>
@@ -154,7 +159,7 @@
 
 						<tr>
 							<td>
-								<label for='image-name'>Image</label>
+								<label for='image-name' data-i18n="image">Image</label>
 							</td>
 
 							<td>
@@ -165,13 +170,13 @@
 
 						<tr>
 							<td>
-								<label for='button-shape'>Shape</label>
+								<label for='button-shape' data-i18n="shape">Shape</label>
 							</td>
 
 							<td>
 								<select id='button-shape' class='notranslate' translate='no'>
-									<option>rect</option>
-									<option>radial</option>
+									<option value="rect" data-i18n="shape-rect">rect</option>
+									<option value="radial" data-i18n="shape-radial">radial</option>
 								</select>
 							</td>
 						</tr>
@@ -179,7 +184,7 @@
 						<tr>
 							<td>
 								<button class='empty expander button--normal-size' id='btn-additional-button'
-									onclick='toggleAdditionalButtonProperties()'>Additional</button>
+									onclick='toggleAdditionalButtonProperties()' data-i18n="additional">Additional</button>
 							</td>
 							<td></td>
 						</tr>
@@ -241,9 +246,9 @@
 
 						<tr class='js-additional-button-property hidden'>
 							<td class='vertical-align-top'>
-								<label for='raw-button-properties'>Raw data:</label>
+								<label for='raw-button-properties' data-i18n="raw-data">Raw data:</label>
 								<br>
-								<span class='small-warning'>Edit carefully!</span>
+								<span class='small-warning' data-i18n="edit-carefully">Edit carefully!</span>
 							</td>
 
 							<td>
@@ -253,11 +258,9 @@
 					</table>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='important' id='button-create-button' onclick='addButton()'>Create
-						button</button>
-					<button class='important' id='button-edit-button' onclick='editButton()'>Edit
-						button</button>
-					<button onclick='hideButtonEditor()'>Cancel</button>
+					<button class='important' id='button-create-button' onclick='addButton()' data-i18n="create-button">Create button</button>
+					<button class='important' id='button-edit-button' onclick='editButton()' data-i18n="edit-button-title">Edit button</button>
+					<button onclick='hideButtonEditor()' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -266,40 +269,40 @@
 		<div id='overlay-create-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Create/Edit overlay</span>
+					<span data-i18n="create-edit-overlay-title">Create/Edit overlay</span>
 					<button class='close-button danger' onclick='hideOverlayEditor()'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<div class='dialog-content-box__section'>
-						<label>Overlay name</label>
+						<label data-i18n="overlay-name">Overlay name</label>
 						<input type='text' id='overlay-name' class='js-dialog__focus' autocomplete='off'>
 						<br class='wide'>
 						<input type='checkbox' autocomplete='off' id='chk-edit-overlay'
 							onchange='updateNewOverlayFields()'>
-						<label for='chk-edit-overlay' class='group-header'>Edit current overlay</label>
+						<label for='chk-edit-overlay' class='group-header' data-i18n="edit-current-overlay">Edit current overlay</label>
 						<br class='wide'>
 						<input type='checkbox' autocomplete='off' id='chk-duplicate-overlay'
 							onchange='updateNewOverlayFields()'>
-						<label for='chk-duplicate-overlay'>Duplicate current overlay</label>
+						<label for='chk-duplicate-overlay' data-i18n="duplicate-current-overlay">Duplicate current overlay</label>
 						<br class='wide'>
 						<input type='checkbox' autocomplete='off' id='chk-portrait-overlay'
 							onchange='updateNewOverlayFields()'>
-						<label for='chk-portrait-overlay'>Portrait</label>
+						<label for='chk-portrait-overlay' data-i18n="overlay-portrait">Portrait</label>
 					</div>
 					<div class='dialog-content-box__section'>
 						<button class='empty expander button--normal-size' onclick='toggleAdditionalOverlayProperties()'
-							id='overlay-additional-button'>Additional</button>
+							id='overlay-additional-button' data-i18n="overlay-additional">Additional</button>
 						<div id='overlay-properties-container' class='dialog-content-box__expandable hidden'>
-							<span class='small-warning'>WARNING! Edit carefully!</span>
+							<span class='small-warning' data-i18n="warning-edit-carefully">WARNING! Edit carefully!</span>
 							<br>
 							<textarea spellcheck='false' id='raw-overlay-properties'></textarea>
 						</div>
 					</div>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button id='overlay-create-button' class='important' onclick='addOverlay()'>Create overlay</button>
-					<button id='overlay-edit-button' class='danger hidden' onclick='editOverlay()'>Edit overlay</button>
-					<button onclick='hideOverlayEditor()'>Cancel</button>
+					<button id='overlay-create-button' class='important' onclick='addOverlay()' data-i18n="create-overlay">Create overlay</button>
+					<button id='overlay-edit-button' class='danger hidden' onclick='editOverlay()' data-i18n="edit-overlay-title">Edit overlay</button>
+					<button onclick='hideOverlayEditor()' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -308,37 +311,37 @@
 		<div id='aspect-fixer-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Fix aspect ratio</span>
-					<span id='aspect-hint' class='hidden'>portrait</span>
+					<span data-i18n="fix-aspect-ratio-title">Fix aspect ratio</span>
+					<span id='aspect-hint' class='hidden' data-i18n="portrait-hint">portrait</span>
 					<button class='close-button danger' onclick='hideAspectFixer()'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<div class='dialog-content-box__section'>
-						<span class='group-header'>Initial aspect ratio</span>
+						<span class='group-header' data-i18n="initial-aspect-ratio">Initial aspect ratio</span>
 						<br class='wide'>
 						<input type='number' step=0.00001 id='initial-aspect-width' value=16>
-						<span>:</span>
+						<span data-i18n="aspect-sep">:</span>
 						<input type='number' step=0.00001 id='initial-aspect-height' value=9>
 					</div>
 
 					<div class='dialog-content-box__section'>
-						<span class='group-header'>Target screen dimensions</span>
+						<span class='group-header' data-i18n="target-screen-dimensions">Target screen dimensions</span>
 						<br class='wide'>
 						<input type='number' id='target-display-width'>
-						<span>:</span>
+						<span data-i18n="aspect-sep">:</span>
 						<input type='number' id='target-display-height'>
 					</div>
 
 					<div class='dialog-content-box__section'>
 						<input type='checkbox' id='chk-keep-relative' autocomplete='off'>
-						<label for='chk-keep-relative'>Keep relative positions</label>
+						<label for='chk-keep-relative' data-i18n="keep-relative-positions">Keep relative positions</label>
 						<button class='empty button--normal-size'
-							onclick='showDialog("aspect-hint-dialog", true)'>?</button>
+							onclick='showDialog("aspect-hint-dialog", true)' data-i18n="help-btn">?</button>
 					</div>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='important js-dialog__focus' onclick='fixAspect()'>Fix</button>
-					<button onclick='hideAspectFixer()'>Cancel</button>
+					<button class='important js-dialog__focus' onclick='fixAspect()' data-i18n="fix">Fix</button>
+					<button onclick='hideAspectFixer()' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -347,46 +350,46 @@
 		<div id='screen-size-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Set screen size</span>
+					<span data-i18n="set-screen-size-title">Set screen size</span>
 					<button class='close-button danger' onclick='hideScreenSizeDialog()'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<div class='dialog-content-box__section'>
-						<span class='group-header'>Screen dimensions</span>
+						<span class='group-header' data-i18n="screen-dimensions">Screen dimensions</span>
 						<br class='wide'>
 						<input type='number' id='display-width' step=0.00001 class='js-dialog__focus'>
-						<span>x</span>
+						<span data-i18n="dim-sep">x</span>
 						<input type='number' id='display-height' step=0.00001>
 						<br class='wide'>
 						<input type='checkbox' id='chk-rescale-to-fit' autocomplete='off'>
-						<label for='chk-rescale-to-fit'>Rescale to fit editor window</label>
+						<label for='chk-rescale-to-fit' data-i18n="rescale-to-fit">Rescale to fit editor window</label>
 					</div>
 
 					<div class='dialog-content-box__section'>
 						<button class='empty expander button--normal-size' id='screenshot-settings-expander'
-							onclick='toggleScreenshotSettings()'>Screenshot area</button>
+							onclick='toggleScreenshotSettings()' data-i18n="screenshot-area">Screenshot area</button>
 						<div id='screenshot-area-settings' class='dialog-content-box__expandable hidden'>
 							<input type='number' id='screenshot-width' step=0.00001>
-							<span>x</span>
+							<span data-i18n="dim-sep">x</span>
 							<input type='number' id='screenshot-height' step=0.00001>
 							<br class='wide'>
 							<input type='radio' onchange='onScreenshotModeChange()' id='radio-screenshot-fit'
 								name='screenshot-mode'>
-							<label for='radio-screenshot-fit'>Fit screen</label>
+							<label for='radio-screenshot-fit' data-i18n="fit-screen">Fit screen</label>
 							<br class='narrow'>
 							<input type='radio' onchange='onScreenshotModeChange()' id='radio-screenshot-set'
 								name='screenshot-mode'>
-							<label for='radio-screenshot-set'>Exact size</label>
+							<label for='radio-screenshot-set' data-i18n="exact-size">Exact size</label>
 							<br class='narrow'>
 							<input type='radio' onchange='onScreenshotModeChange()' id='radio-screenshot-match'
 								name='screenshot-mode'>
-							<label for='radio-screenshot-match'>Screenshot image size</label>
+							<label for='radio-screenshot-match' data-i18n="screenshot-image-size">Screenshot image size</label>
 						</div>
 					</div>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='important' onclick='applyScreenDimensions()'>Set size</button>
-					<button onclick='hideScreenSizeDialog()'>Cancel</button>
+					<button class='important' onclick='applyScreenDimensions()' data-i18n="set-size">Set size</button>
+					<button onclick='hideScreenSizeDialog()' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -395,14 +398,14 @@
 		<div id='import-export-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Files</span>
+					<span data-i18n="files-title">Files</span>
 					<button class='close-button danger' onclick='hideFileDialog()'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<table>
 						<tr>
 							<td>
-								<span>Import config</span>
+								<span data-i18n="import-config">Import config</span>
 							</td>
 							<td>
 								<span class='input_file'>
@@ -414,7 +417,7 @@
 
 						<tr>
 							<td>
-								<span>Import images</span>
+								<span data-i18n="import-images">Import images</span>
 							</td>
 							<td>
 								<span class='input_file'>
@@ -427,7 +430,7 @@
 						<tr>
 							<td>
 								<input type='checkbox' id='chk-show-screenshot'>
-								<label for='chk-show-screenshot'>Game screenshot</label>
+								<label for='chk-show-screenshot' data-i18n="game-screenshot">Game screenshot</label>
 							</td>
 							<td>
 								<span class='input_file'>
@@ -439,21 +442,21 @@
 
 						<tr>
 							<td colspan='2'>
-								<span id='download-help'>Config file and image files must be stored in same
-									folder.</span>
+								<span id='download-help' data-i18n="file-hint">Config file and image files must be stored in same folder.</span>
 							</td>
 						</tr>
 
 						<tr>
 							<td>
 								<button class='empty' id='export-button' onclick='createDownloadLink()'><a
-										id='export-link' download='new-retropad.cfg' href=''>Export config</a></button>
+										id='export-link' download='new-retropad.cfg' href='' data-i18n="export-config">Export config</a></button>
 								<button class="empty button--normal-size"
-									onclick='showDialog("export-hint-dialog", true)'>?</button>
+									onclick='showDialog("export-hint-dialog", true)' data-i18n="help-btn">?</button>
 							</td>
 							<td>
 								<a
-									href='https://github.com/Valent-in/retropad-editor/releases/download/v0.6/overlay-images.zip'>
+									href='https://github.com/Valent-in/retropad-editor/releases/download/v0.6/overlay-images.zip'
+									data-i18n="image-pack">
 									Image pack
 								</a>
 							</td>
@@ -461,7 +464,7 @@
 					</table>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button onclick='hideFileDialog()'>Close</button>
+					<button onclick='hideFileDialog()' data-i18n="close">Close</button>
 				</div>
 			</div>
 		</div>
@@ -469,32 +472,34 @@
 		<div id='export-hint-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Config hint</span>
+					<span data-i18n="config-hint-title">Config hint</span>
 					<button class='close-button danger' onclick='showDialog("export-hint-dialog", false)'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
-					<p style='padding-bottom:8px'>
+					<p style='padding-bottom:8px' data-i18n="config-hint-p1">
 						RetroArch overlays are built from a collection of images and a text configuration file.
 					</p>
-					<p>
+					<p data-i18n="config-hint-p2">
 						The config file (.cfg) describes:
 					</p>
 					<ul style='padding-left:2rem;padding-bottom:8px'>
-						<li>The hitbox for each input event, i.e. "size" of the button.</li>
-						<li>Which images (.png) should be shown over the input elements.</li>
+						<li data-i18n="config-hint-li1">The hitbox for each input event, i.e. "size" of the button.</li>
+						<li data-i18n="config-hint-li2">Which images (.png) should be shown over the input elements.</li>
 					</ul>
-					<p style='padding-bottom:8px'>More information:
+					<p style='padding-bottom:8px'><span data-i18n="more-info">More information:</span>
 						<a href='https://docs.libretro.com/development/retroarch/input/overlay/' target='_blank'
-							rel='noopener'>Libretro docs</a>.
+							rel='noopener' data-i18n="libretro-docs">Libretro docs</a>.
 					</p>
-					<p style='padding-bottom:8px'>To use default "flat" image set:
+					<p style='padding-bottom:8px'><span data-i18n="use-flat-images">To use default "flat" image set:</span>
 						<a
-							href='https://github.com/Valent-in/retropad-editor/releases/download/v0.6/overlay-images.zip'>
-							download</a> and unpack archive, place config in folder with images.
+							href='https://github.com/Valent-in/retropad-editor/releases/download/v0.6/overlay-images.zip'
+							data-i18n="download">
+							download
+						</a> and unpack archive, place config in folder with images.
 					</p>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='js-dialog__focus' onclick='showDialog("export-hint-dialog", false)'>Close</button>
+					<button class='js-dialog__focus' onclick='showDialog("export-hint-dialog", false)' data-i18n="close">Close</button>
 				</div>
 			</div>
 		</div>
@@ -502,11 +507,11 @@
 		<div id='reset-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__content-box'>
-					<span>Do you want to reset?<br>All unsaved editions will be lost!</span>
+					<span data-i18n-html="true" data-i18n="reset-question">Do you want to reset?<br>All unsaved editions will be lost!</span>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='danger js-dialog__focus' onclick='resetPad()'>Reset</button>
-					<button onclick='showDialog("reset-dialog", false)'>Cancel</button>
+					<button class='danger js-dialog__focus' onclick='resetPad()' data-i18n="reset-btn">Reset</button>
+					<button onclick='showDialog("reset-dialog", false)' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -514,11 +519,11 @@
 		<div id='overlay-delete-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__content-box'>
-					<span>Delete current overlay?</span>
+					<span data-i18n="delete-overlay-question">Delete current overlay?</span>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='danger js-dialog__focus' onclick='delCurrentOverlay()'>Delete</button>
-					<button onclick='showDialog("overlay-delete-dialog", false)'>Cancel</button>
+					<button class='danger js-dialog__focus' onclick='delCurrentOverlay()' data-i18n="delete-btn">Delete</button>
+					<button onclick='showDialog("overlay-delete-dialog", false)' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -526,11 +531,11 @@
 		<div id='button-delete-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__content-box'>
-					<span>Delete selected button?</span>
+					<span data-i18n="delete-button-question">Delete selected button?</span>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='danger js-dialog__focus' onclick='delCurrentButton()'>Delete</button>
-					<button onclick='showDialog("button-delete-dialog", false)'>Cancel</button>
+					<button class='danger js-dialog__focus' onclick='delCurrentButton()' data-i18n="delete-btn">Delete</button>
+					<button onclick='showDialog("button-delete-dialog", false)' data-i18n="cancel">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -538,10 +543,10 @@
 		<div id='name-exist-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__content-box'>
-					<span>Overlay with this name already exist.</span>
+					<span data-i18n="name-exist">Overlay with this name already exist.</span>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='js-dialog__focus' onclick='showDialog("name-exist-dialog", false)'>Close</button>
+					<button class='js-dialog__focus' onclick='showDialog("name-exist-dialog", false)' data-i18n="close">Close</button>
 				</div>
 			</div>
 		</div>
@@ -549,10 +554,10 @@
 		<div id='name-empty-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__content-box'>
-					<span>Enter overlay name.</span>
+					<span data-i18n="name-empty">Enter overlay name.</span>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='js-dialog__focus' onclick='showDialog("name-empty-dialog", false)'>Close</button>
+					<button class='js-dialog__focus' onclick='showDialog("name-empty-dialog", false)' data-i18n="close">Close</button>
 				</div>
 			</div>
 		</div>
@@ -560,20 +565,20 @@
 		<div id='aspect-hint-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Aspect ratio hint</span>
+					<span data-i18n="aspect-hint-title">Aspect ratio hint</span>
 					<button class='close-button danger' onclick='showDialog("aspect-hint-dialog", false)'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<div class='aspect-hint-text-container'>
-						<span>Default aspect ratio fix</span>
+						<span data-i18n="aspect-hint-default">Default aspect ratio fix</span>
 					</div>
 					<img id='aspect-hint-image' src='aspect-ratio-hint.svg'>
 					<div class='aspect-hint-text-container'>
-						<span>Keep relative positions</span>
+						<span data-i18n="aspect-hint-keep">Keep relative positions</span>
 					</div>
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='js-dialog__focus' onclick='showDialog("aspect-hint-dialog", false)'>Close</button>
+					<button class='js-dialog__focus' onclick='showDialog("aspect-hint-dialog", false)' data-i18n="close">Close</button>
 				</div>
 			</div>
 		</div>
@@ -581,27 +586,27 @@
 		<div id='colors-dialog' class='dialog-container hidden'>
 			<div class='modal-dialog'>
 				<div class='modal-dialog__header-box'>
-					<span>Color theme</span>
+					<span data-i18n="color-theme-title">Color theme</span>
 					<button class='close-button danger' onclick='showDialog("colors-dialog", false)'></button>
 				</div>
 				<div class='modal-dialog__content-box'>
 					<input type=radio name='color-scheme-radio' id='color-scheme-0' autocomplete='off' checked
 						onchange='setColorScheme(0)'>
-					<label for='color-scheme-0' id='color-scheme-0-label'>Color theme 0</label>
+					<label for='color-scheme-0' id='color-scheme-0-label' data-i18n="color-theme-0">Color theme 0</label>
 					<br class='wide'>
 
 					<input type=radio name='color-scheme-radio' id='color-scheme-1' autocomplete='off'
 						onchange='setColorScheme(1)'>
-					<label for='color-scheme-1' id='color-scheme-1-label'>Color theme 1</label>
+					<label for='color-scheme-1' id='color-scheme-1-label' data-i18n="color-theme-1">Color theme 1</label>
 					<br class='wide'>
 
 					<input type=radio name='color-scheme-radio' id='color-scheme-2' autocomplete='off'
 						onchange='setColorScheme(2)'>
-					<label for='color-scheme-2' id='color-scheme-2-label'>Color theme 2</label>
+					<label for='color-scheme-2' id='color-scheme-2-label' data-i18n="color-theme-2">Color theme 2</label>
 
 				</div>
 				<div class='modal-dialog__footer-box'>
-					<button class='js-dialog__focus' onclick='showDialog("colors-dialog", false)'>Close</button>
+					<button class='js-dialog__focus' onclick='showDialog("colors-dialog", false)' data-i18n="close">Close</button>
 				</div>
 			</div>
 		</div>

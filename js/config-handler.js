@@ -177,7 +177,7 @@ function ConfigHandler() {
 		let count = Number(_getParamValue('overlays'));
 
 		if (count <= 1) {
-			alert('Can not delete last overlay');
+			alert(__('cannot-delete-last-overlay'));
 			return;
 		}
 
@@ -346,7 +346,7 @@ function ConfigHandler() {
 		let buttCount = Number(_getParamValue('overlay' + _currentOverlay + '_descs'));
 
 		if (buttCount <= 1) {
-			alert('Can not delete last button!');
+			alert(__('cannot-delete-last-button'));
 			return;
 		}
 
@@ -890,7 +890,7 @@ function ConfigHandler() {
 		}
 
 		if (missingImages.length > 0) {
-			alert('Images are requiered for loading gamepad config:\n\n' + missingImages.join("\n") + '\n\nImport these files and click "Reset".')
+			alert(__('missing-images', { files: missingImages.join("\n") }))
 		}
 
 		if (toLoad == 0) {

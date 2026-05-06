@@ -8,7 +8,7 @@
 				let name = '';
 				switch (event.target.files.length) {
 					case 0:
-						name = "Browse";
+						name = __('browse');
 						break;
 
 					case 1:
@@ -16,7 +16,7 @@
 						break;
 
 					default:
-						name = event.target.files.length + ' files';
+						name = event.target.files.length + __('files-count');
 				}
 				fspan.innerHTML = name;
 

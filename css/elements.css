@@ -406,7 +406,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .input_file label:empty::before {
-	content: 'Browse...';
 	display: inline-block;
 	text-align: center;
 	width: 100%;

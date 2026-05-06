@@ -545,3 +545,25 @@ input[type=number] {
 .hidden {
 	display: none;
 }
+
+.lang-select {
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	border: 1px solid #ccd;
+	background-color: #e9e9f1;
+	color: #777;
+	padding: 2px 4px;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 0.9em;
+}
+
+.lang-select:hover {
+	border-color: #aab;
+}
+
+.lang-select:focus {
+	box-shadow: 0 0 0 2px rgba(180, 200, 220, 0.3);
+	outline: none;
+}

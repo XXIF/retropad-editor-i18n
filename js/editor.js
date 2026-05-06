@@ -86,6 +86,11 @@ document.getElementById('load-button-images').addEventListener('change', loadIma
 document.getElementById('load-screenshot').addEventListener('change', loadScreenshotFile);
 document.getElementById('chk-show-screenshot').addEventListener('change', toggleScreenshot);
 
+// i18n language switch
+document.getElementById('lang-select').addEventListener('change', function (e) {
+	window.__setLang(e.target.value);
+});
+
 
 function applyButtonParam(section, sValue) {
 	let value = Number(sValue);
@@ -352,9 +357,9 @@ function loadConfigFromFile(e) {
 		try {
 			renderConfig(ev.target.result);
 		} catch {
-			let errMsg = 'FILE PARSING ERROR!';
+			let errMsg = __('file-parsing-error');
 			console.log(errMsg);
-			alert(errMsg + '\nReload page and try again.')
+			alert(errMsg + '\n' + __('reload-page'))
 		}
 	};
 	reader.readAsText(file);
@@ -651,7 +656,7 @@ function buildAndSetOverlaySelectors(selectIndex) {
 	select.innerHTML = '';
 
 	for (let i = 0; i < list.length; i++) {
-		let name = (i + 1) + ' - ' + (list[i] ? list[i] : '[unnamed]');
+		let name = (i + 1) + ' - ' + (list[i] ? list[i] : __('unnamed'));
 		let o = document.createElement('OPTION');
 		o.appendChild(document.createTextNode(name));
 		select.appendChild(o);
@@ -877,7 +882,7 @@ function processRawProperties(str) {
 		let eqPos = line.indexOf('=');
 
 		if (eqPos <= 0) {
-			alert('Error in line "' + line + '"\nProperty removed');
+			alert(__('error-in-line', { line: line }));
 			return;
 		}
 
@@ -1057,7 +1062,7 @@ function getButtonDataFromDialog() {
 	d.command = document.getElementById('command-name').value.trim() || 'null';
 	if (d.command.search(/\s/) != -1) {
 		d.warn = true;
-		alert('Button command should not contain spaces');
+				alert(__('command-no-spaces'));
 	}
 
 	d.shape = ['rect', 'radial'][document.getElementById('button-shape').selectedIndex];
@@ -1147,7 +1152,7 @@ function delCurrentButton() {
 	showDialog('button-delete-dialog', false);
 
 	if (!conf.deleteCurrentButton())
-		alert('No selection!');
+		alert(__('no-selection'));
 	redrawPad();
 }
 
